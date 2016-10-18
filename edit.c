@@ -7,7 +7,7 @@ void edit() {
    
 	int c, tmp, i = -1;
 	int copystr[COLS - 1];
-	char findstr[16], comparestr[16]; replacestr[16];
+	// char findstr[16], comparestr[16], replacestr[16];
 
    	while(1){
    	
