@@ -31,37 +31,37 @@ void input() {
            			else
                				flash();
            			break;
-           	case KEY_DOWN:
-           		if (row < LINES - 1)
-               			move(++row, col);
-           		else
-               		flash();
-           		break;
-           	case KEY_UP:
-           		if (row > 0)
-            			move(--row, col);
-           		else
-            			flash();
-           		break;
-           	case KEY_RIGHT:
-           		if (col < COLS - 1 && col < len(row))
-            			move(row, ++col);
-           		else
-            			flash();
-           		break;
-           	case KEY_ENTER:
-            case 13:
-           		move(++row, col = 0);
-           		break;
+           		case KEY_DOWN:
+           			if (row < LINES - 1)
+               				move(++row, col);
+           			else
+               				flash();
+           			break;
+           		case KEY_UP:
+           			if (row > 0)
+            				move(--row, col);
+           			else
+            				flash();
+           			break;
+           		case KEY_RIGHT:
+           			if (col < COLS - 1 && col < len(row))
+            				move(row, ++col);
+           			else
+            				flash();
+           			break;
+           		case KEY_ENTER:
+            		case 13:
+           			move(++row, col = 0);
+           			break;
 
-           	default: 
-           		insch(c);
-        		move(row, ++col);
-        		if (col == COLS - 1)
-        			move(++row, col = 0);
-        		break;
-        }
-        refresh();
+           		default: 
+           			insch(c);
+        			move(row, ++col);
+        			if (col == COLS - 1)
+        				move(++row, col = 0);
+        			break;
+        	}
+        	refresh();
    	}
    	move(LINES - 1, COLS - 20);
    	clrtoeol();
