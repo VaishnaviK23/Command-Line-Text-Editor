@@ -1,5 +1,5 @@
-try: main.o edit.o input.o backspace.o linelen.o
-	cc main.o edit.o input.o backspace.o linelen.o -lncurses -o try
+myeditor: main.o edit.o input.o backspace.o linelen.o
+	cc main.o edit.o input.o backspace.o linelen.o -lncurses -o myeditor
 main.o: main.c editor.h
 	cc -Wall -c main.c
 edit.o: edit.c undo_stack.h editor.h
