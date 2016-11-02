@@ -18,12 +18,34 @@
 #include <stdio.h>
 #include <curses.h>
 #include "editor.h"
-
-int len(int lineno) {
-	int linelen = COLS - 1;
-
-	while (linelen >= 0 && mvwinch(pad, lineno, linelen) == ' ')
-		linelen--;
-	return linelen + 1;
+/* Paste below or above cursor depending on value of flags */
+void pPaste(int *copystr, int i, int flags) {
+	int j, tmpcol;
+	if (i == -1)
+		flash();
+	else {
+		tmpcol = col;
+		if (row == pad_topline + LINES - 1) {
+			if (flags == 1)
+				--pad_topline;
+			else
+				++pad_topline;
+		}
+		prefresh(pad, pad_topline, 0, 0, 0, LINES - 1, COLS - 1);
+		if (flags == 0)
+			++row;
+                wmove(pad, row, col = 0);
+                winsertln(pad);
+                ++max_lines;
+                prefresh(pad, pad_topline, 0, 0, 0, LINES - 1, COLS - 1);
+                for (j = 0; j < i; j++)
+			waddch(pad, copystr[j]);
+                j = 0;
+                if (flags == 1)
+			++row;
+		else
+			--row;
+                wmove(pad, row, col = tmpcol);
+                prefresh(pad, pad_topline, 0, 0, 0, LINES - 1, COLS - 1);
+       }
 }
-

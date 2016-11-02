@@ -2,7 +2,7 @@
 #include <curses.h>
 #include "editor.h"
 void backspace () {
-        if (col == 0 && row == 0) {
+        if (col == 0 && row == 3) {
         	if (len(row) == 0)
         		wdeleteln(pad);
                 flash();

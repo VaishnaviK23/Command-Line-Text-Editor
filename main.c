@@ -1,3 +1,20 @@
+/*****************************************************************************
+ * Copyright (C) Vaishnavi Kulkarni vaishnavikulkarni@hotmail.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3.0 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <error.h>
 #include <curses.h>
@@ -35,7 +52,7 @@ int main(int argc, char *argv[]) {
    			switch (c) {
    				case 'h': 
    					clear();
-   					printw("Usage: %s FILE\nEDITOR COMMANDS:\nCTRL(D)/KEY_EIC/Esc -Escape input mode and enter command mode\n'h'                 -Move left\n'j'                 -Move down\n'k'                 -Move up\n'l'                 -Move right\n'i'/KEY_IC          -Input mode\n'x'/KEY_DC          -Delete current character\n'o'/KEY_IL          -Open new line and enter input mode\n'd'/KEY_DL          -Delete current line\n'c'                 -Copy current line\n'p'                 -Paste copied line below the cursor\n'P'                 -Paste copied line above the cursor\nCTRL(L)/KEY_CLEAR   -Clear screen\n'w'                 -Save and quit\n'q'                 -Quit without saving\n\n\nTo exit help, press <q>", argv[0]);
+   					printw("Usage: %s FILE\nEDITOR COMMANDS:\nCTRL(D)/KEY_EIC/Esc -Escape input mode and enter command mode\n'h'                 -Move left\n'j'                 -Move down\n'k'                 -Move up\n'l'                 -Move right\n'i'/KEY_IC          -Input mode\n'x'/KEY_DC          -Delete current character\n'o'/KEY_IL          -Open new line and enter input mode\n'd'/KEY_DL          -Delete current line\n'c'                 -Copy current line\nCTRL('X')           -Cut current line.\nCTRL('V')           -Paste cut/copied line at cursor.\n'p'                 -Paste cut/copied line below the cursor\n'P'                 -Paste cut/copied line above the cursor\n'f'                 -Find a character string.\n'r'                 -Replace the found string.\n'g'                 -Go to a line number.\n't'                 -Exit find/replace mode.\nCTRL(L)/KEY_CLEAR   -Clear screen\n'w'                 -Save and quit\n'q'                 -Quit without saving\n", argv[0]);
    					break;
    				case 'q':
    					endwin();
@@ -48,17 +65,20 @@ int main(int argc, char *argv[]) {
    	}
 	
 	if(strcmp(argv[1], "-h") == 0) {
-		printf("Usage: %s FILE\nEDITOR COMMANDS:\nCTRL(D)/KEY_EIC/Esc -Escape input mode and enter command mode\n'h'                 -Move left\n'j'                 -Move down\n'k'                 -Move up\n'l'                 -Move right\n'i'/KEY_IC          -Input mode\n'x'/KEY_DC          -Delete current character\n'o'/KEY_IL          -Open new line and enter input mode\n'd'/KEY_DL          -Delete current line\n'c'                 -Copy current line\n'p'                 -Paste copied line below the cursor\n'P'                 -Paste copied line above the cursor\nCTRL(L)/KEY_CLEAR   -Clear screen\n'w'                 -Save and quit\n'q'                 -Quit without saving\n", argv[0]);
+		printf("Usage: %s FILE\nEDITOR COMMANDS:\nCTRL(D)/KEY_EIC/Esc -Escape input mode and enter command mode\n'h'                 -Move left\n'j'                 -Move down\n'k'                 -Move up\n'l'                 -Move right\n'i'/KEY_IC          -Input mode\n'x'/KEY_DC          -Delete current character\n'o'/KEY_IL          -Open new line and enter input mode\n'd'/KEY_DL          -Delete current line\n'c'                 -Copy current line\nCTRL('X')           -Cut current line.\nCTRL('V')           -Paste cut/copied line at cursor.\n'p'                 -Paste cut/copied line below the cursor\n'P'                 -Paste cut/copied line above the cursor\n'f'                 -Find a character string.\n'r'                 -Replace the found string.\n'g'                 -Go to a line number.\n't'                 -Exit find/replace mode.\n'u'                 -Undo a command.\n'r'                 -Redo a command.\nCTRL(L)/KEY_CLEAR   -Clear screen\n'w'                 -Save and quit\n'q'                 -Quit without saving\n", argv[0]);
 		exit(3);
 	}
 	if(strcmp(argv[1], "--h") == 0) {
 		fprintf(stderr, "Usage: %s -h\n", argv[0]);
        		exit(4);
        	}
-     	fp = fopen(argv[1], "a+");
-	if (fp == NULL)
-		fp = fopen(argv[1], "r");
-   	
+	creat = 0;
+     	fp = fopen(argv[1], "r");
+	if (fp == NULL) {
+		fp = fopen(argv[1], "a+");
+		creat = 1;
+	}
+   	max_lines = 0;
 	while ((c = getc(fp)) != EOF) {
 		i++;
 		if(i == COLS - 1 || c == '\n') {
@@ -74,7 +94,7 @@ int main(int argc, char *argv[]) {
    	idlok(stdscr, TRUE);
    	keypad(stdscr, TRUE);
 
-	plines = 128 * max_lines;
+	plines = 762 * LINES;
 	
 	pad = newpad(plines, COLS);
 	
@@ -86,14 +106,14 @@ int main(int argc, char *argv[]) {
        		pechochar(pad, c);
    	}
 
-   	wmove(pad, row = 0, col = 0);
+   	wmove(pad, row = 3, col = 0);
    	prefresh(pad, pad_topline, 0, 0, 0, LINES - 1, COLS - 1);
-   	edit();
+   	edit(argv[1]);
    	fclose(fp);
 
    	/* Write out the file */
    	fp = fopen(argv[1], "w");
-   	for (l = 0; l <= max_lines; l++) {
+   	for (l = 3; l <= max_lines; l++) {
        		n = len(l);
        		for (i = 0; i < n; i++)
            		putc(mvwinch(pad, l, i) & A_CHARTEXT, fp);
