@@ -9,5 +9,4 @@
 # -Deletes current line.
 # -Can copy/cut a line under the cursor and paste it either below, above, or at cursor position.
 # -Can find a character string and replace it.
-# -Undo and redo functionality.
 # -Can go to a line entered by the user.
