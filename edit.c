@@ -32,9 +32,9 @@ void edit(char *filename) {
         winsdelln(pad, 3);
         prefresh(pad, pad_topline, 0, 0, 0, LINES - 1, COLS - 1);
         wstandout(pad);
-        mvwaddstr(pad, 0, 0, "<h:LEFT> <j:DOWN> <k:UP> <l:RIGHT>");
+        mvwaddstr(pad, 0, 0, "<h:LEFT> <j:DOWN> <k:UP> <l:RIGHT> <w:SAVE AND QUIT> <q:QUIT>");
         mvwaddstr(pad, 1, 0, "<x:DELETE> <d:DELETE LINE> <c:COPY LINE> <CTRL+X:CUT LINE> <CTRL+V:PASTE LINE AT CURSOR> <p:PASTE BELOW> <P:PASTE ABOVE> ");
-        mvwaddstr(pad, 2, 0, "<i:INPUT MODE> <o:INPUT FROM NEW LINE> <f:FIND> <r:REPLACE> <g:GO TO LINE> <t:EXIT FIND/REPLACE> <CTRL+L:CLEAR> <w:SAVE AND QUIT> <q:QUIT>");
+        mvwaddstr(pad, 2, 0, "<i:INPUT MODE> <o:INPUT FROM NEW LINE> <f:FIND> <r:REPLACE> <g:GO TO LINE> <t:EXIT FIND/REPLACE> <CTRL+L:CLEAR>");
         wstandend(pad);
         prefresh(pad, pad_topline, 0, 0, 0, LINES - 1, COLS - 1);
         max_lines += 3;
@@ -291,9 +291,9 @@ void edit(char *filename) {
                                 row = 3;
                                 col = 0;
                                 wstandout(pad);
-        			mvwaddstr(pad, 0, 0, "<h:LEFT> <j:DOWN> <k:UP> <l:RIGHT>");
+        			mvwaddstr(pad, 0, 0, "<h:LEFT> <j:DOWN> <k:UP> <l:RIGHT> <w:SAVE AND QUIT> <q:QUIT>");
        				mvwaddstr(pad, 1, 0, "<x:DELETE> <d:DELETE LINE> <c:COPY LINE> <CTRL+X:CUT LINE> <CTRL+V:PASTE LINE AT CURSOR> <p:PASTE BELOW> <P:PASTE ABOVE> ");
-        			mvwaddstr(pad, 2, 0, "<i:INPUT MODE> <o:INPUT FROM NEW LINE> <f:FIND> <r:REPLACE> <t:EXIT FIND/REPLACE> <CTRL+L:CLEAR> <w:SAVE AND QUIT> <q:QUIT>");
+        			mvwaddstr(pad, 2, 0, "<i:INPUT MODE> <o:INPUT FROM NEW LINE> <f:FIND> <r:REPLACE> <g:GO TO LINE> <t:EXIT FIND/REPLACE> <CTRL+L:CLEAR>");
         			wstandend(pad);
         			prefresh(pad, pad_topline = 0, 0, 0, 0, LINES - 1, COLS - 1);
                                 break;
@@ -313,7 +313,6 @@ void edit(char *filename) {
                 }
         }
 }
-
 
 
 
